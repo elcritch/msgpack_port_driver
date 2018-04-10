@@ -3,7 +3,6 @@ defmodule MsgpackPortDriver.Port do
   require Logger
 
   defmacro __using__(_opts) do
-    IO.puts "You are USING ModA"
     quote do
       import __MODULE__.start
       import __MODULE__.stop
