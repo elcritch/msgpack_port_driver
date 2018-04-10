@@ -1,16 +1,20 @@
 #!/usr/bin/make
 
-# ----------- Makefile Configs   --------------
-export SUBDIRS = src/
-export GENDIR= gen/
+# ----------- Makefile Configs --------------
 
-# ----------- C Compiler Configs --------------
-export LDFLAGS = 
-export CFLAGS = 
+# add more sub-projects here by adding the relative dir path
+export SUBDIRS  = src/
+# set object output directories here (relative to file)
+export OBJDIR   = .
+
+# ----------- Compiler Configs --------------
+export LDFLAGS  = 
+export CFLAGS   = 
 export CXXFLAGS = -g -std=c++11 -O2 -Wall -Wextra 
 
 export PREFIX = $(abspath ./priv)
 
+# ----------- Make Rules --------------
 all: $(PREFIX) $(SUBDIRS)
 
 $(PREFIX):

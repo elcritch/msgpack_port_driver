@@ -7,7 +7,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
     ldflags: "",
     prefix: "./priv",
     subdirs: "src/",
-    gendir: "gen/"
+    objdir: "."
   ]
 
   @shortdoc "Simply runs the Hello.say/0 command."
@@ -45,17 +45,21 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
     """
     #!/usr/bin/make
 
-    # ----------- Makefile Configs   --------------
-    export SUBDIRS = <%= subdirs %>
-    export GENDIR= <%= gendir %>
+    # ----------- Makefile Configs --------------
 
-    # ----------- C Compiler Configs --------------
-    export LDFLAGS = <%= ldflags %>
-    export CFLAGS = <%= cflags %>
+    # add more sub-projects here by adding the relative dir path
+    export SUBDIRS  = <%= subdirs %>
+    # set object output directories here (relative to file)
+    export OBJDIR   = <%= objdir %>
+
+    # ----------- Compiler Configs --------------
+    export LDFLAGS  = <%= ldflags %>
+    export CFLAGS   = <%= cflags %>
     export CXXFLAGS = <%= cxxflags %>
 
     export PREFIX = $(abspath <%= prefix %>)
 
+    # ----------- Make Rules --------------
     all: $(PREFIX) $(SUBDIRS)
 
     $(PREFIX):

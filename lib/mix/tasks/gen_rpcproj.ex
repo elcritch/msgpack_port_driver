@@ -12,21 +12,9 @@ defmodule Mix.Tasks.Rpclib.Gen.Rpclib do
 
   @shortdoc "Simply runs the Hello.say/0 command."
   def run(args) do
-    switch_names = @makefile_options |> Keyword.keys()
-    {parsed_opts, _other, errors} = OptionParser.parse(args, switches: switch_names)
 
-    if length(errors) > 0 do
-      for {switch, _value} <- errors do
-        sw_name = String.trim_leading(switch, "-")
-        IO.puts("Warning: unknown option: #{sw_name}")
+    {_, make_options} = args |> Rpclib.Gen.parse_options(@makefile_options)
 
-        switch_names
-        |> Enum.filter(&(String.jaro_distance(to_string(&1), sw_name) > 0.8))
-        |> Enum.each(fn x -> IO.puts("    - Did you mean `#{x}`?\n") end)
-      end
-    end
-
-    make_options = (@makefile_options ++ parsed_opts) |> Keyword.new()
     make_options = Keyword.update!(make_options, :subdirs, &String.split(&1, ~r/[ ,]/))
 
     IO.puts("Generating makefile with options:")
@@ -43,34 +31,38 @@ defmodule Mix.Tasks.Rpclib.Gen.Rpclib do
 
   def makefile_template(args) do
     """
+    #!/usr/bin/make
 
-    SRC=$(wildcard *.cpp )
+    # ----------- Source / Target Configs --------------
+    SRC=$(wildcard *.cpp)
     OBJ=$(SRC:.cpp=.o)
 
-    .PHONY: all clean
+    TARGETS= <%= for target <- targets do %> $(PREFIX)/<% target %> <% end %>
 
-    DEFAULT_TARGETS = $(TARGET)/display
+    # ----------- Compiler Configs --------------
+    LDFLAGS  += <%= ldflags %>
+    CFLAGS   += <%= cflags %>
+    CXXFLAGS += <%= cxxflags %>
 
-    LDFLAGS +=
-    CFLAGS += -Idispatcher/include 
-    # CFLAGS += -Idispatcher/include -Ishims/ -Ic-periphery/src/ -Iadafruit/ -Iadafruit/gfx/
-    CDEFINES += -D__FlashStringHelper=char
-
+    # ----------- Make Rules --------------
     all: $(DEFAULT_TARGETS)
 
     %.o: %.c
-    \t$(CC) -c $(ERL_CFLAGS) $(CFLAGS_SSD) $(CDEFINES) -o $@ $<
+    \t$(CC) -c $(CFLAGS) $(CDEFS) -o $@ $<
 
     %.o: %.cpp
-    \t$(CXX) -c $(ERL_CFLAGS) $(CFLAGS) $(CDEFINES) -o $@ $<
+    \t$(CXX) -c $(CXXFLAGS) $(CDEFS) -o $@ $<
 
-    $(TARGET)/display: $(OBJ)
-    \t$(CXX) $^ $(ERL_LDFLAGS) $(LDFLAGS) -o $@ dispatcher/libdispatcher.a ssd1306-bb/lib_bb_display.a
+    <%= for target <- targets do %>
+    $(PREFIX)/<%= target %>: $(OBJ)
+    \t$(CXX) $^ $(ERL_LDFLAGS) -o $@ $(LDFLAGS)
+    <% end %>
 
     clean:
-    rm -f $(OBJ)
-    rm -f $(TARGET)/display
+    \trm -f $(OBJ)
+    \trm -f $(TARGETS)
 
+    .PHONY: all clean
 
     """
     |> EEx.eval_string(args)
