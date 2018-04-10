@@ -9,7 +9,7 @@ Status: Usable but may require tinkering
 ```elixir
 def deps do
   [
-    {:rpclib_port_driver, "~> 0.1.2"},
+    {:rpclib_port_driver, "~> 0.1.2", github: "elcritch/msgpack_port_driver"},
   ]
 end
 ```
