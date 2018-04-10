@@ -1,4 +1,4 @@
-# RpclibPortDriver
+# MsgpackPortDriver
 
 Library for creating C++11 Erlang port drivers using `rpclib`, which is a "Modern rpclib - modern msgpack-rpc for C++".
 
