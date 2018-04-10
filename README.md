@@ -9,7 +9,7 @@ Status: Usable but may require tinkering
 ```elixir
 def deps do
   [
-    {:rpclib_port_driver, "~> 0.1.0", github: "elcritch/rpclib_port_driver"},
+    {:rpclib_port_driver, "~> 0.1.0"},
   ]
 end
 ```
