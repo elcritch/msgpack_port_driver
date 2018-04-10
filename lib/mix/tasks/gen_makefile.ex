@@ -1,19 +1,19 @@
 defmodule Mix.Tasks.Rpclib.Gen.Makefile do
   use Mix.Task
 
-  @default_options [
+  @makefile_options [
     cflags: "",
     cxxflags: "-g -std=c++11 -O2 -Wall -Wextra ",
     ldflags: "",
     target: "./priv",
-    projects: "src/",
+    subdirs: "src/",
     gendir: "gen/",
   ]
 
   @shortdoc "Simply runs the Hello.say/0 command."
   def run(args) do
 
-    switch_names = @default_options |> Keyword.keys()
+    switch_names = @makefile_options |> Keyword.keys()
     {parsed_opts, other, errors} = OptionParser.parse(args, switches: switch_names)
 
     if length(errors) > 0 do
@@ -29,7 +29,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
       end
     end
 
-    make_options = @default_options ++ parsed_opts |> Keyword.new()
+    make_options = @makefile_options ++ parsed_opts |> Keyword.new()
     IO.puts "Generating makefile with options:"
     make_options |> Enum.map(fn {k,v} -> "\t#{k |> to_string() |> String.upcase()}: #{v}" end) |> Enum.each(&IO.puts/1)
     IO.puts ""
@@ -47,7 +47,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
     #!/usr/bin/make
 
     # ----------- Makefile Configs   --------------
-    export PROJECTS = <%= projects %>
+    export SUBDIRS = <%= subdirs %>
     export GENDIR= <%= gendir %>
 
     # ----------- C Compiler Configs --------------
@@ -62,13 +62,13 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
     $(TARGET):
       mkdir -p $(TARGET)/
 
-    $(PROJECTS):
+    $(SUBDIRS):
       $(MAKE) -C $@
 
     clean:
-      @for d in $(PROJECTS); do (cd $$d; $(MAKE) clean ); done
+      @for d in $(SUBDIRS); do (cd $$d; $(MAKE) clean ); done
 
-    .PHONY: $(PROJECTS)
+    .PHONY: $(SUBDIRS)
 
     """
     |> EEx.eval_string(args)
