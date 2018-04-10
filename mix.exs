@@ -2,7 +2,7 @@ defmodule RpclibPortDriver.MixProject do
   use Mix.Project
 
   @app :rpclib_port_driver
-  @version "0.1.0-alpha"
+  @version "0.1.0"
 
   @description """
   Library for creating C++11 Erlang port drivers using `rpclib`, which is a "Modern rpclib - modern msgpack-rpc for C++".
