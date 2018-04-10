@@ -33,7 +33,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Driver do
 
     # Link rpclib deps
     dep_path =
-      Mix.Project.deps_paths()[:rpclib_port_driver]
+      Mix.Project.deps_paths()[ Mix.Project.config()[:app] ]
       |> Path.relative_to_cwd()
       |> fn p -> p <> "/priv/dispatcher/" end.()
 
