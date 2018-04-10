@@ -12,6 +12,7 @@ defmodule RpclibPortDriver.MixProject do
     [
       app: @app,
       version: @version,
+      description: @description,
       elixir: "~> 1.4",
       start_permanent: Mix.env() == :prod,
       package: package(),
