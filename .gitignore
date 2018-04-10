@@ -20,6 +20,9 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-rpclib_port_driver-*.tar
+msgpack_port_driver-*.tar
 
 test_src/
+
+priv/dispatcher/
+
