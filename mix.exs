@@ -26,7 +26,7 @@ defmodule MsgpackPortDriver.MixProject do
       maintainers: ["Jaremy Creechley <creechley@gmail.com>"],
       licenses: ["Apache-2.0"],
       links: %{"GitHub" => "https://github.com/elcritch/#{@app}"},
-      files: ["lib/", "README.md", "mix.exs", "config/", "priv/dispatcher.tar.xz"]
+      files: ["lib/", "README.md", "mix.exs", "config/", "Makefile", "priv/dispatcher.tar.xz"]
     ]
   end
 
