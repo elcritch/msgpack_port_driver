@@ -7,7 +7,7 @@ Library for creating C++11 Erlang port drivers using `rpclib`, which is a "Moder
 ```elixir
 def deps do
   [
-    {:rpclib_port_driver, "~> 0.1.0"}
+    {:rpclib_port_driver, "~> 0.1.0-alpha"} # usable but may require tinkering
   ]
 end
 ```
