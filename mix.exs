@@ -1,15 +1,32 @@
 defmodule RpclibPortDriver.MixProject do
   use Mix.Project
 
+  @app :rpclib_port_driver
+  @version: "0.1.0"
+
+  
+  @description """
+  Library for creating C++11 Erlang port drivers using `rpclib`, which is a "Modern rpclib - modern msgpack-rpc for C++".
+  """
+
   def project do
     [
-      app: :rpclib_port_driver,
-      version: "0.1.0",
-      elixir: "~> 1.6",
+      app: @app,
+      version: @version,
+      elixir: "~> 1.4",
       start_permanent: Mix.env() == :prod,
       make_executable: "make",
       # compilers: [:elixir_make] ++ Mix.compilers, 
       deps: deps()
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Jaremy Creechley <creechley@gmail.com>"],
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/elcritch/#{@app}"},
+      files: ["lib/", "priv/", "README.md", "mix.exs", "config/", "src"]
     ]
   end
 
