@@ -74,7 +74,4 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
     |> EEx.eval_string(args)
   end
 
-  def blank?(s) do
-    if String.match?(s || "", ~r/^\W*$/), do: s, else: nil
-  end
 end
