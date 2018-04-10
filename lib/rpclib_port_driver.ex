@@ -12,7 +12,7 @@ defmodule RpclibPortDriver do
 
   C++ example:
 
-  ```c++
+  ```
 
   /* rpc example functions */
   int bar(int x, int y) {
