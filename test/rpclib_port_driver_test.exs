@@ -1,8 +1,8 @@
-defmodule RpclibPortDriverTest do
+defmodule MsgpackPortDriverTest do
   use ExUnit.Case
-  doctest RpclibPortDriver
+  doctest MsgpackPortDriver
 
   # test "greets the world" do
-    # assert RpclibPortDriver.hello() == :world
+    # assert MsgpackPortDriver.hello() == :world
   # end
 end

@@ -1,7 +1,7 @@
-defmodule RpclibPortDriver.MixProject do
+defmodule MsgpackPortDriver.MixProject do
   use Mix.Project
 
-  @app :rpclib_port_driver
+  @app :msgpack_port_driver
   @version "0.1.0"
 
   @description """

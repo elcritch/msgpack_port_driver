@@ -1,6 +1,6 @@
-defmodule RpclibPortDriver do
+defmodule MsgpackPortDriver do
   @moduledoc """
-  Documentation for RpclibPortDriver.
+  Documentation for MsgpackPortDriver.
 
   ## About
 
