@@ -1,11 +1,11 @@
-defmodule Mix.Tasks.Rpclib.Gen.Makefile do
+defmodule Mix.Tasks.Rpclib.Gen.Rpclib do
   use Mix.Task
 
   @makefile_options [
     cflags: "",
     cxxflags: "-g -std=c++11 -O2 -Wall -Wextra ",
     ldflags: "",
-    prefix: "./priv",
+    target: "./priv",
     subdirs: "src/",
     gendir: "gen/"
   ]
@@ -43,31 +43,34 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
 
   def makefile_template(args) do
     """
-    #!/usr/bin/make
 
-    # ----------- Makefile Configs   --------------
-    export SUBDIRS = <%= subdirs %>
-    export GENDIR= <%= gendir %>
+    SRC=$(wildcard *.cpp )
+    OBJ=$(SRC:.cpp=.o)
 
-    # ----------- C Compiler Configs --------------
-    export LDFLAGS = <%= ldflags %>
-    export CFLAGS = <%= cflags %>
-    export CXXFLAGS = <%= cxxflags %>
+    .PHONY: all clean
 
-    export PREFIX = $(abspath <%= prefix %>)
+    DEFAULT_TARGETS = $(TARGET)/display
 
-    all: $(PREFIX) $(SUBDIRS)
+    LDFLAGS +=
+    CFLAGS += -Idispatcher/include 
+    # CFLAGS += -Idispatcher/include -Ishims/ -Ic-periphery/src/ -Iadafruit/ -Iadafruit/gfx/
+    CDEFINES += -D__FlashStringHelper=char
 
-    $(PREFIX):
-    \tmkdir -p $(PREFIX)/
+    all: $(DEFAULT_TARGETS)
 
-    $(SUBDIRS):
-    \t$(MAKE) -C $@
+    %.o: %.c
+    \t$(CC) -c $(ERL_CFLAGS) $(CFLAGS_SSD) $(CDEFINES) -o $@ $<
+
+    %.o: %.cpp
+    \t$(CXX) -c $(ERL_CFLAGS) $(CFLAGS) $(CDEFINES) -o $@ $<
+
+    $(TARGET)/display: $(OBJ)
+    \t$(CXX) $^ $(ERL_LDFLAGS) $(LDFLAGS) -o $@ dispatcher/libdispatcher.a ssd1306-bb/lib_bb_display.a
 
     clean:
-    \t@for d in $(SUBDIRS); do (cd $$d; $(MAKE) clean ); done
+    rm -f $(OBJ)
+    rm -f $(TARGET)/display
 
-    .PHONY: $(SUBDIRS)
 
     """
     |> EEx.eval_string(args)

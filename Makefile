@@ -9,12 +9,12 @@ export LDFLAGS =
 export CFLAGS = 
 export CXXFLAGS = -g -std=c++11 -O2 -Wall -Wextra 
 
-export TARGET = $(abspath ./priv)
+export PREFIX = $(abspath ./priv)
 
-all: $(TARGET) $(SUBDIRS)
+all: $(PREFIX) $(SUBDIRS)
 
-$(TARGET):
-	mkdir -p $(TARGET)/
+$(PREFIX):
+	mkdir -p $(PREFIX)/
 
 $(SUBDIRS):
 	$(MAKE) -C $@
