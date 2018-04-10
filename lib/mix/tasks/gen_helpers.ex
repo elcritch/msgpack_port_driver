@@ -1,5 +1,7 @@
 
 defmodule Rpclib.Gen do
+  @moduledoc false
+
 
   def parse_options(args, switch_defaults) do
 

@@ -1,6 +1,8 @@
 defmodule Mix.Tasks.Rpclib.Gen.Makefile do
   use Mix.Task
 
+  @moduledoc false
+
   @makefile_options [
     cflags: "",
     cxxflags: "-g -std=c++11 -O2 -Wall -Wextra ",

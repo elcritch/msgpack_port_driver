@@ -2,12 +2,14 @@
 
 Library for creating C++11 Erlang port drivers using `rpclib`, which is a "Modern rpclib - modern msgpack-rpc for C++".
 
+Status: Usable but may require tinkering
+
 ## Installation
 
 ```elixir
 def deps do
   [
-    {:rpclib_port_driver, "~> 0.1.0"} # usable but may require tinkering
+    {:rpclib_port_driver, "~> 0.1.0", github: "elcritch/rpclib_port_driver"},
   ]
 end
 ```
@@ -37,6 +39,8 @@ The Erlang port drivers are somewhat tedious and adding new functions requires e
 The networking / socket stack has been removed and replaced with a very simple stdio based driver. The driver can be found in the `erl_comm.hpp` header. It listens on `stdin` and parses the Erlang ports communication protocol (it's a very simple protocol and worth reading `erl_comm.hpp` file or Erlang port documentation). 
 
 ## Example
+
+C++ example:
 
 ```c++
 

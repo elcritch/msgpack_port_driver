@@ -2,6 +2,8 @@ defmodule Mix.Tasks.Rpclib.Gen.Driver do
   use Mix.Task
   alias Mix.Tasks.Rpclib.Gen.Makefile
 
+  @moduledoc false
+
   @driver_options [
     subdir: "src/",
     targets: "rpclib_driver",
