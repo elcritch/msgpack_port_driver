@@ -40,7 +40,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Project do
     # ----------- Makefile Configs --------------
 
     # add more sub-projects here by adding the relative dir path
-    export SUBDIRS  = <%= subdirs |> String.join(" ") %>
+    export SUBDIRS  = <%= subdirs |> Enum.join(" ") %>
     # set object output directories here (relative to file)
     export OBJDIR   = <%= objdir %>
 
