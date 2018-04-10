@@ -5,73 +5,90 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
     cflags: "",
     cxxflags: "-g -std=c++11 -O2 -Wall -Wextra ",
     ldflags: "",
-    prefix: "./priv",
-    subdirs: "src/",
-    objdir: "."
+    subdir: "",
+    targets: "",
   ]
 
   @shortdoc "Simply runs the Hello.say/0 command."
   def run(args) do
-    switch_names = @makefile_options |> Keyword.keys()
-    {parsed_opts, _other, errors} = OptionParser.parse(args, switches: switch_names)
 
-    if length(errors) > 0 do
-      for {switch, _value} <- errors do
-        sw_name = String.trim_leading(switch, "-")
-        IO.puts("Warning: unknown option: #{sw_name}")
+    {_, make_options, _other} = args |> Rpclib.Gen.parse_options(@makefile_options)
 
-        switch_names
-        |> Enum.filter(&(String.jaro_distance(to_string(&1), sw_name) > 0.8))
-        |> Enum.each(fn x -> IO.puts("    - Did you mean `#{x}`?\n") end)
-      end
+    create_makefile(make_options)
+  end
+
+  def create_makefile(make_options) do
+
+    make_options = Keyword.update!(make_options, :targets, &String.split(&1, ~r/[ ,]/))
+
+    unless String.length(String.trim(make_options[:subdir])) > 0 do
+      raise "Must provide a subdirectory for rpclib"
     end
-
-    make_options = (@makefile_options ++ parsed_opts) |> Keyword.new()
-    make_options = Keyword.update!(make_options, :subdirs, &String.split(&1, ~r/[ ,]/))
 
     IO.puts("Generating makefile with options:")
 
-    make_options |> Enum.map(fn {k, v} -> "\t#{k |> to_string() |> String.upcase()}: #{v}" end)
+    make_options
+    |> Enum.map(fn {k, v} -> "\t#{k |> to_string() |> String.upcase()}: #{v}" end)
     |> Enum.each(&IO.puts/1)
 
     IO.puts("")
 
-    makefile = makefile_template(make_options)
+    # Make subdir and makefile
+    subdir = make_options[:subdir]
 
-    File.write!("./Makefile", makefile)
+    # unless IO.inspect(Path.relative_to_cwd(subdir)) != subdir do
+      # raise "Error, path is not relative to current directory. Cowardly refusing to make directory. "
+    # end
+
+    # Configuring sub-directory
+    File.mkdir_p!(subdir)
+
+    makefile = makefile_template(make_options)
+    File.write!("#{subdir}/Makefile", makefile)
+
   end
 
   def makefile_template(args) do
     """
     #!/usr/bin/make
 
-    # ----------- Makefile Configs --------------
+    # ----------- Source / Target Configs --------------
+    SRC=$(wildcard *.cpp)
+    OBJ=$(SRC:.cpp=.o)
 
-    # add more sub-projects here by adding the relative dir path
-    export SUBDIRS  = <%= subdirs %>
-    # set object output directories here (relative to file)
-    export OBJDIR   = <%= objdir %>
+    TARGETS= <% for target <- targets do %> $(PREFIX)/<%= target %> <% end %>
 
     # ----------- Compiler Configs --------------
-    export LDFLAGS  = <%= ldflags %>
-    export CFLAGS   = <%= cflags %>
-    export CXXFLAGS = <%= cxxflags %>
-
-    export PREFIX = $(abspath <%= prefix %>)
+    LDFLAGS  += <%= ldflags %>
+    CFLAGS   += <%= cflags %>
+    CXXFLAGS += <%= cxxflags %>
 
     # ----------- Make Rules --------------
-    all: $(PREFIX) $(SUBDIRS)
+    all: $(DEFAULT_TARGETS)
 
-    $(PREFIX):
-    \tmkdir -p $(PREFIX)/
+    %.o: %.c
+    \t$(CC) -c $(CFLAGS) $(CDEFS) -o $@ $<
 
-    $(SUBDIRS):
-    \t$(MAKE) -C $@
+    %.o: %.cpp
+    \t$(CXX) -c $(CXXFLAGS) $(CDEFS) -o $@ $<
+
+    <%= for target <- targets do %>
+    $(PREFIX)/<%= target %>: $(OBJ)
+    \t$(CXX) $^ $(ERL_LDFLAGS) -o $@ $(LDFLAGS)
+    <% end %>
 
     clean:
-    \t@for d in $(SUBDIRS); do (cd $$d; $(MAKE) clean ); done
+    \trm -f $(OBJ)
+    \trm -f $(TARGETS)
 
-    .PHONY: $(SUBDIRS)
+    .PHONY: all clean
+
+    """
+    |> EEx.eval_string(args)
+  end
+
+  def driver_template(args) do
+    """
 
     """
     |> EEx.eval_string(args)

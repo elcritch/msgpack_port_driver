@@ -4,7 +4,7 @@ defmodule Rpclib.Gen do
   def parse_options(args, switch_defaults) do
 
     switch_names = switch_defaults |> Keyword.keys()
-    {parsed_opts, _other, errors} = OptionParser.parse(args, switches: switch_names)
+    {parsed_opts, other, errors} = OptionParser.parse(args, switches: switch_names)
 
     options = (switch_defaults ++ parsed_opts) |> Keyword.new()
 
@@ -23,6 +23,6 @@ defmodule Rpclib.Gen do
         :errors
       end
 
-    {status?, options}
+    {status?, options, other}
   end
 end
