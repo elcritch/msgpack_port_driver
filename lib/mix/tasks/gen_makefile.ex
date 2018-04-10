@@ -14,7 +14,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
   def run(args) do
 
     switch_names = @makefile_options |> Keyword.keys()
-    {parsed_opts, other, errors} = OptionParser.parse(args, switches: switch_names)
+    {parsed_opts, _other, errors} = OptionParser.parse(args, switches: switch_names)
 
     if length(errors) > 0 do
       for {switch, _value} <- errors do
@@ -30,6 +30,9 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
     end
 
     make_options = @makefile_options ++ parsed_opts |> Keyword.new()
+    make_options =
+      Keyword.update!(make_options, :subdirs, &(String.split(&1, ~r/[ ,]/)) )
+
     IO.puts "Generating makefile with options:"
     make_options |> Enum.map(fn {k,v} -> "\t#{k |> to_string() |> String.upcase()}: #{v}" end) |> Enum.each(&IO.puts/1)
     IO.puts ""
@@ -39,10 +42,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
     File.write!("./Makefile", makefile)
   end
 
-
   def makefile_template(args) do
-
-
     """
     #!/usr/bin/make
 
@@ -57,16 +57,16 @@ defmodule Mix.Tasks.Rpclib.Gen.Makefile do
 
     export TARGET = $(abspath <%= target %>)
 
-    all: priv_dir $(SUBDIRS)
+    all: $(TARGET) $(SUBDIRS)
 
     $(TARGET):
-      mkdir -p $(TARGET)/
+    \tmkdir -p $(TARGET)/
 
     $(SUBDIRS):
-      $(MAKE) -C $@
+    \t$(MAKE) -C $@
 
     clean:
-      @for d in $(SUBDIRS); do (cd $$d; $(MAKE) clean ); done
+    \t@for d in $(SUBDIRS); do (cd $$d; $(MAKE) clean ); done
 
     .PHONY: $(SUBDIRS)
 
