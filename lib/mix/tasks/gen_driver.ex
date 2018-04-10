@@ -29,6 +29,12 @@ defmodule Mix.Tasks.Rpclib.Gen.Driver do
     driver = driver_template(driver_options)
     File.write!("#{subdir}/rpclib_driver.cpp", driver)
 
+    # Link rpclib deps
+    dep_path = Mix.Project.deps_path(:rpclib_port_driver)
+
+    IO.puts "dep_path: #{inspect dep_path}"
+
+    # File.ln_s!()
   end
 
 
