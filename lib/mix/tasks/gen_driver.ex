@@ -33,7 +33,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Driver do
     dep_path =
       Mix.Project.deps_paths()[:rpclib_port_driver]
       |> Path.relative_to_cwd()
-      |> &(&1 <> "/src").()
+      |> fn p -> p <> "/src" end.()
 
     dep_path =
       case Path.type(dep_path) do
