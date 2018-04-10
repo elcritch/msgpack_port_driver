@@ -34,7 +34,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Driver do
       Mix.Project.deps_paths()[:rpclib_port_driver]
       |> Path.relative_to("#{subdir}")
 
-    IO.puts "rpclib dep_path: #{inspect dep_path}"
+    IO.puts "linking `#{subdir}/dispatcher/` to rpclib dep_path: #{inspect dep_path}"
     File.ln_s!(dep_path, "#{subdir}/dispatcher")
 
   end
