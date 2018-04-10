@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Driver do
     targets: "rpclib_driver",
   ]
 
-  @shortdoc "Simply runs the Hello.say/0 command."
+  @shortdoc "Create new msgpack rpc driver "
   def run(args) do
 
     {_, driver_options, _other} = args |> Rpclib.Gen.parse_options(@driver_options)
