@@ -14,7 +14,7 @@ defmodule RpclibPortDriver.MixProject do
       version: @version,
       elixir: "~> 1.4",
       start_permanent: Mix.env() == :prod,
-      make_executable: "make",
+      package: package(),
       # compilers: [:elixir_make] ++ Mix.compilers, 
       deps: deps()
     ]
@@ -40,9 +40,8 @@ defmodule RpclibPortDriver.MixProject do
   defp deps do
     [
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:elixir_make, "~> 0.4", runtime: false}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+      {:elixir_make, "~> 0.4", runtime: false},
+      {:msgpax, "~> 2.0"},
     ]
   end
 end
