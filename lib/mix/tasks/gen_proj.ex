@@ -51,6 +51,9 @@ defmodule Mix.Tasks.Rpclib.Gen.Project do
 
     export PREFIX = $(abspath <%= prefix %>)
 
+    export CC ?= $(CROSSCOMPILE)-gcc
+    export CXX ?= $(CROSSCOMPILE)-g++
+
     # ----------- Make Rules --------------
     all: $(PREFIX) $(SUBDIRS)
 
