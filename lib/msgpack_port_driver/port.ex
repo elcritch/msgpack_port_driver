@@ -1,4 +1,4 @@
-defmodule MsgpackPortDriver.Port do
+defmodule RpclibPortDriver.Port do
 
   require Logger
 

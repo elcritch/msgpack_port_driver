@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Driver do
     targets: "rpclib_driver",
   ]
 
-  @shortdoc "Create new msgpack rpc driver "
+  @shortdoc "Create new rpclib rpc driver "
   def run(args) do
 
     {_, driver_options, _other} = args |> Rpclib.Gen.parse_options(@driver_options)
@@ -33,7 +33,7 @@ defmodule Mix.Tasks.Rpclib.Gen.Driver do
 
     # Link rpclib deps
     dep_path =
-      Mix.Project.deps_paths()[ :msgpack_port_driver ]
+      Mix.Project.deps_paths()[ :rpclib_port_driver ]
       |> Path.relative_to_cwd()
       |> fn p -> p <> "/priv/dispatcher/" end.()
 

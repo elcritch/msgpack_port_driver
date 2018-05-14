@@ -1,6 +1,6 @@
 # MsgpackPortDriver
 
-Library for creating C++11 Erlang port drivers using `rpclib`, which is a "Modern rpclib - modern msgpack-rpc for C++".
+Library for creating C++11 Erlang port drivers using `rpclib`, which is a "Modern rpclib - modern rpclib-rpc for C++".
 
 Status: Usable but may require tinkering
 
@@ -9,7 +9,7 @@ Status: Usable but may require tinkering
 ```elixir
 def deps do
   [
-    {:rpclib_port_driver, "~> 0.1.2", github: "elcritch/msgpack_port_driver"},
+    {:rpclib_port_driver, "~> 0.1.2", github: "elcritch/rpclib_port_driver"},
   ]
 end
 ```
